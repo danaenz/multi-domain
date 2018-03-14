@@ -2,8 +2,10 @@
 
 namespace SilverStripe\MultiDomain;
 
-use SilverStripe\Core\Object;
-use SilverStripe\MultiDomain\MultiDomainDomain;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
+
 
 /**
  * A utility class that provides several static methods for parsing URLs
@@ -12,8 +14,12 @@ use SilverStripe\MultiDomain\MultiDomainDomain;
  * @package  silverstripe-multi-domain
  * @author  Aaron Carlino <aaron@silverstripe.com>
  */
-class MultiDomain extends Object
+class MultiDomain
 {
+    use Extensible;
+    use Injectable;
+    use Configurable;
+
     /**
      * The key for the "primary" domain
      *

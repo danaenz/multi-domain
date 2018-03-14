@@ -5,8 +5,9 @@ namespace SilverStripe\MultiDomain;
 use Exception;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Object;
-use SilverStripe\MultiDomain\MultiDomain;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
 
 /**
  * Class definition for an object representing a configured domain
@@ -14,8 +15,12 @@ use SilverStripe\MultiDomain\MultiDomain;
  * @package  silverstripe-multi-domain
  * @author  Aaron Carlino <aaron@silverstripe.com>
  */
-class MultiDomainDomain extends Object
+class MultiDomainDomain
 {
+    use Extensible;
+    use Injectable;
+    use Configurable;
+
     /**
      * The hostname of the domain, e.g. silverstripe.org
      * @var string
@@ -79,8 +84,6 @@ class MultiDomainDomain extends Object
         $myForced = isset($config['force']) ? $config['force'] : array ();
         $this->allowedPaths = array_merge($globalAllowed, $myAllowed);
         $this->forcedPaths = array_merge($globalForced, $myForced);
-
-        parent::__construct();
     }
 
     /**
@@ -139,6 +142,7 @@ class MultiDomainDomain extends Object
      *
      * @param  string $url
      * @return string
+     * @throws Exception
      */
     public function getNativeURL($url)
     {

@@ -6,10 +6,7 @@ use Exception;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Control\HTTPResponse;
-use SilverStripe\Control\RequestFilter;
-use SilverStripe\Control\Session;
-use SilverStripe\ORM\DataModel;
+use SilverStripe\Control\Middleware\HTTPMiddleware;
 
 /**
  * A request filter for handling multi-domain logic
@@ -17,7 +14,7 @@ use SilverStripe\ORM\DataModel;
  * @package  silverstripe-multi-domain
  * @author  Aaron Carlino <aaron@silverstripe.com>
  */
-class MultiDomainRequestFilter implements RequestFilter
+class MultiDomainRequestFilter implements HTTPMiddleware
 {
 
     /**
@@ -25,14 +22,16 @@ class MultiDomainRequestFilter implements RequestFilter
      * URL in the request
      *
      * @param  HTTPRequest $request
-     * @param  Session     $session
-     * @param  DataModel   $model
+     * @param callable     $delegate
+     * @return \SilverStripe\Control\HTTPResponse
+     * @throws Exception
      */
-    public function preRequest(HTTPRequest $request, Session $session, DataModel $model)
+    public function process(HTTPRequest $request, callable $delegate)
     {
+        $response = $delegate($request);
 
         if (Director::is_cli()) {
-            return;
+            return $response;
         }
 
         // Not the best place for validation, but _config.php is too early.
@@ -50,17 +49,11 @@ class MultiDomainRequestFilter implements RequestFilter
             $url = $this->createNativeURLForDomain($domain);
             $parts = explode('?', $url);
             $request->setURL($parts[0]);
-        }
-    }
 
-    /**
-     * Post request noop
-     * @param  HTTPRequest  $request
-     * @param  HTTPResponse $response
-     * @param  DataModel    $model
-     */
-    public function postRequest(HTTPRequest $request, HTTPResponse $response, DataModel $model)
-    {
+            $response = $delegate($request);
+        }
+
+        return $response;
     }
 
     /**

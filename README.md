@@ -18,7 +18,8 @@ Allows multiple domains to access one CMS instance, mapping them to different se
 
 Each domain is identified by a key. You must define one domain using the `primary` key to mark it as the primary domain.
 
-```yml
+```yaml
+
 ---
 Name: mymultidomain
 After: '#multidomain'
@@ -40,7 +41,8 @@ SilverStripe\MultiDomain\MultiDomain:
 
 Sometimes you may have routes that should resolve normally, and bypass the multidomain filter. In this case, for any given domain, you can specify an `allow` list.
 
-```yml
+```yaml
+
 ---
 Name: mymultidomain
 After: '#multidomain'
@@ -63,7 +65,8 @@ In the above example, any URL beginning with `admin/`, `Security/` or matching `
 
 You can put your `allow` node directly under `MultiDomain` to have a global whitelist.
 
-```yml
+```yaml
+
 ---
 Name: mymultidomain
 After: '#multidomain'
@@ -80,7 +83,8 @@ SilverStripe\MultiDomain\MultiDomain:
 
 Sometimes, you may have a page that sits outside the node representing a domain, but you still want it to be considered part of that domain. For this, you can use the `force` option.
 
-```yml
+```yaml
+
 ---
 Name: mymultidomain
 After: '#multidomain'
@@ -103,7 +107,8 @@ will nonetheless resolve the page, even though the page isn't under `shop/store`
 If you have multiple test environments, it may not make sense for you to hard code the host name in the config. Alternatively, you can define an environment variable, i.e. a constant, and refer to it as a string in the config.
 
 
-```yml
+```yaml
+
 ---
 Name: mymultidomain
 After: '#multidomain'
