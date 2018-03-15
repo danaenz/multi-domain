@@ -2,10 +2,10 @@
 
 namespace SilverStripe\MultiDomain;
 
-use Exception;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\Middleware\HTTPMiddleware;
 
 /**
@@ -23,23 +23,21 @@ class MultiDomainRequestFilter implements HTTPMiddleware
      *
      * @param  HTTPRequest $request
      * @param callable     $delegate
-     * @return \SilverStripe\Control\HTTPResponse
-     * @throws Exception
+     * @return HTTPResponse
      */
     public function process(HTTPRequest $request, callable $delegate)
     {
-        $response = $delegate($request);
-
         if (Director::is_cli()) {
+            $response = $delegate($request);
             return $response;
         }
 
         // Not the best place for validation, but _config.php is too early.
         if (!MultiDomain::get_primary_domain()) {
-            throw new Exception(
-                'MultiDomain must define a "' . MultiDomain::KEY_PRIMARY . '" domain in the config, under "domains"'
-            );
+            return new HTTPResponse( 'MultiDomain must define a "' . MultiDomain::KEY_PRIMARY . '" domain in the config, under "domains"', 400);
         }
+
+        $response = $delegate($request);
 
         foreach (MultiDomain::get_all_domains() as $domain) {
             if (!$domain->isActive()) {
