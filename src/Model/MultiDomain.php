@@ -5,6 +5,7 @@ namespace SilverStripe\MultiDomain;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Dev\Debug;
 
 
 /**
@@ -61,6 +62,7 @@ class MultiDomain
         $domains = array ();
 
         foreach (self::config()->domains as $key => $config) {
+
             if (!$includePrimary && $key === self::KEY_PRIMARY) {
                 continue;
             }

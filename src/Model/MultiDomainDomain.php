@@ -8,6 +8,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Dev\Debug;
 
 /**
  * Class definition for an object representing a configured domain
@@ -211,6 +212,7 @@ class MultiDomainDomain
     public function setRequestUri($requestUri)
     {
         $this->requestUri = (string) $requestUri;
+
         return $this;
     }
 

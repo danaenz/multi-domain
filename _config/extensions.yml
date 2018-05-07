@@ -1,0 +1,6 @@
+---
+Name: multidomainextensions
+---
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - SilverStripe\MultiDomain\SiteTreeExtension
